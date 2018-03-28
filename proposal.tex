@@ -1,0 +1,263 @@
+\documentclass[a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{subcaption}
+\usepackage{sectsty}% http://ctan.org/pkg/sectsty
+\usepackage{xcolor}% http://ctan.org/pkg/xcolor
+\usepackage{setspace}
+\usepackage{verbatim}
+%-----------------------------------------BEGIN DOC----------------------------------------
+
+\begin{document}
+
+\doublespacing
+\title{MedRec}
+
+\begin{titlepage}
+\begin{center}
+
+\textsc{\Large MIT ViralMedia}\\[4em]
+
+\vspace{4em}
+
+\textsc{\huge \textbf{MedRec - Patient Centered Medical Records}}\\[4em]
+
+\textsc{\large Thesis Proposal}\\[1em]
+
+\textsc{by}\\[1em]
+
+\textsc{\Large Nchinda Nchinda}\\[1em]
+
+\textsc{\large Advisor: Andrew Lippman}
+
+\end{center}
+
+\vspace*{\fill}
+\textsc{MIT Media Lab\hspace*{\fill} 2017}
+
+\end{titlepage}
+%-----------------------------------------ABSTRACT-------------------------------------
+\begin{comment}
+
+\begin{center}
+{\large\bf{Abstract\\}}
+\end{center}
+abstract stuff
+\end{comment}
+
+%-----------------------------------------CONTENT-------------------------------------
+\tableofcontents\label{c}
+\newpage
+
+%----------------------------------------OVERVIEW-----------------------------------------
+
+\section{Introduction}
+The major sites on the internet today represent the modern kingdom. Facebook, Google, Amazon, each control a massive domain. Each of these companies collects the data of millions of people in a completely opaque way. With so much information about people flowing through their servers these companies posses an enormous amount of control over the perception and dissemination of information.
+
+This creates one of the major problems with the internet and digital media today. People interacting with these sites lack control over their own identity as well as information relating to and supporting it. As a person interacts with sites accross the Internet they leave behind bits and pieces of their identity as medatadata- phone numbers, credit cards, addresses, etc.
+If any of this information changes it's almost impossible to track down all the occurances across the web and update it. Additionally the more sites these bits are stored on the more likely they are to be stolen via hacks or other security breaches.
+
+A person may have multiple identities, but an identity once formed cannot be changed. An identity is formed through a history of events which together make it unique. The defining parts of this identity cannot be destroyed. As a person's identity is spread among more data silos on the internet they lose the ability to maintain and control their own identity. That power is transferred to the owners of the data silos.
+
+Many have spoken to this problem in the past. In fact, some have suggested that a modern solution to that problem is to use a “blockchain” as the identity registry.  A blockchain most generally is a distributed, append-only ledger of information that in at least one instantiation, bitcoin, has defended itself against all attempts to undermine or take it down. Additionally, it has been able to do this in a completely open, transparent, and distributed manner- the polar opposite from some of the titans of the modern Internet. A particularly salient aspect of blockchain technology is it allows every participant to maintain a self-soverign identity. There is no single, central repository which can be taken down or corrupted. Instead information is stored in a distributed, ownerless system.
+
+We propose MedRec as a way to explore this space.  Medrec is an access management system for medical records, but at it's core it is simply an access management system. Its main goal is to give patients control over the distribution of their private data. Therefore, by building such an identity control system for medical records, we simultaneously solve a social problem and prove a model for other applications.
+
+We also note that identity, like retirement plans and medical records themselves are important aspects of life that most people avoid thinking deeply about. That means that an important aspect of the Medrec work is making be something that people will want to use.
+
+This thesis will create the basic blockchain-based means for identity control: protection against identity fraud, a means to register contracts through which your information can be used by others, and a secure, distributed system for holding that information.
+
+We also have a primary goal of doing this in a non-commercial, free, and open way, so that it can become widely used and developed.  This avoids creating a multiplicity of commercial intermediaries that each have their own proprietary solutions.
+
+In the following pages, I will outline the details of the work, but to understand the context of this project requires looking at how it fits into much bigger systems.
+
+\subsection{Bitcoin}
+
+Bitcoin is a cryptocurrency and consensus network used by thousands to millions of people around the world for sending monetary transactions. Unlike traditional fiat currencies it is not backed by a central bank or government. Instead every user, developer, and participant in the network has to agree to run the same rules coded into the software. Instead of storing the state of account balances in a central trusted entity, the entire network must come to consensus on the current state and every transaction that changes that state.
+
+The problem that Bitcoin solves is generally called the Byzantine Generals Problem. This is a problem that plauges distributed systems with unreliable links, such as the Internet and Bitcoin. A Byzantine Fault Tolerant system is one that solves the Byzantine Generals Problem. The problem arises when multiple parties cannont come to consensus about the state of the world due to untrustworthy communication. The parties involved cannot agree on any plans as those plans as well as their confirmations may be lost in transit. This problem is easily solved in centralized systems where one party can unilaterally make decisions, but in distributed systems even the election of a leader is subject to failure.
+
+itcoin solves this problem and allows nodes in the network to come to consensus by using a datastucture called the blockchain. A blockchain is a list of blocks starting at some "genesis" block and extending til the present time. Transactions are consolidated into batches called \textit{blocks} and appended to the blockchain. The bitcoin blockchain contains all the transactions on the network going back to the first Bitcoin transaction in 2009. Different blockchains utilize different mechanisms to deter invalid blocks and fradulent transactions. The one which Bitcoin uses, and the easiest to understand is \textit{Prof of Work} (PoW). Nodes can opt in to be miners on the network, which have the ability to append blocks to the blockchain. Miners are allowed to choose which transactions to include and which block in the history of the blockchain to build off of. The rationale behind the name PoW is that adding a new block requires finding the solution to a very hard cryptographic puzzle. The puzzle is regularly updated in difficulty to maintain an approximately fixed generation time of new blocks. The entire Bitcoin network working together to find the solution to Bitcoin's puzzle targets ten minutes to find a solution, although mining is a poisson point process so this timing is not exact. This takes an enormous amount of computational resources, current estimates for the amount of engery consumed by the Bitcoin network are between 4.12-4.73 TWh/year. This is more than many countries, putting Bitcoin somewhere between Cambodia and Afghanistan by power usage. In compensation for putting in the resources to solve the problem, the winning miner is paid a fixed amount of Bitcoin. The block with the most work put into making it, and by extension the blockchain with the greatest sum block difficulty is deemed to be the correct one. Miners are allowed to build on top of any block in the blockchain, but the greatest expectation of financial reward comes from building on top of the most recent block.
+
+\subsection{Ethereum}
+
+Ethereum is a blockchain based technology that is used in this project. Ethereum provides capabilities that allow for a much greater breadth of applications than those which Bitcoin could provide.
+
+\subsubsection{SmartContracts}
+
+Nick Szabo first proposed the idea of smart contracts in 1996 to bring traditional law and paper contracts into the digital age. At the time smart contracts were a theoretical construct of codified representations of agreements between parties that could superceed the functionality of traditional paper based contracts. A smart contract could be a living document, almost an agent in itself that once authorized by its signers could autonomouly act to uphold the rules within its code. As of now smart contracts are still primitive and can only support basic if-this-then-that statements and are limited by the blockchain to storing small amounts of data. Even so, they are still being used for a broad class of applications ranging from identity management, provably fair gambling, fundraising, marketplaces, and access control.
+
+\subsubsection{Proof of Authority}
+
+Ethereum also introduced an alternative system of block validation called Proof of Authority (PoA) as an alternative to Proof of Work. While the main Ethereum public chain runs on PoW, there are multiple testnets and private chains running on PoA. PoA operates by a federated model, only certain nodes are allowed to make additions to the blockchain. This changes the security model, the system is more susceptible to fradulent transactions by way of one of those authorities getting hacked. At the same time, it allows faster transaction confirmation times and the ability to remove the cryptocurrency aspect from blockchain technology. Private blockchains bridge the gap between public blockchains which are trustless and psedonymous, and databases which are centralized. In networks where certain entities are already semitrusted it may be prudent to use a private blockchain instead of public with those entities as the custodians.
+
+\subsection{Applications}
+
+MedRec at its core is an distributed, accessible, reliable, and concistent access management system. This is a simple set of features, but enables a diverse range of applications. For example:
+
+\begin{itemize}
+
+\item Emergency Room - A patient with a medical identification tag can expedite the time it takes for an emergency room to identify exactly what is special about their medical condition. With a distributed access management system a patient can selectively grant all emergency rooms access to certain medical records. They could also create more expressive permissions, such as giving a second person the right to make decisions on their behalf during times of incapacitation.
+
+\item Patient Relocation - When a patient swtiches to a new medical provider all of their medical records remain digitally acessible.
+
+\item Pharmacy - When visiting an out of network pharmacy a patient can give the pharmacy temporary access to their perscription data. This allows the pharmcy to verify the veracity of perscriptions in real time against the issuing provider's database.
+
+\item Parental Custodians -  A minor can be placed under the custodianship of their parents. A smart contract governing the minor's access permissions can be set to automatically grant them the ability to manage their own medical data when they become of age.
+
+\end{itemize}
+
+\section{Concept}
+
+MedRec ties together blockchain technology with disparate health provider networks to provide patients with an access management system for their medical data. Healthcare providers are allowed to continue to maintain their patient records in whatever way they see fit. MedRec provides software that sits on top of a provider's database and handles external requests for data. Each request is checked against an access list to ensure the requester is authorized to read/write the data. Before blockchain technology this access list would have to be stored in a database managed by a trusted third party. Blockchain technology allows MedRec to store these access permissions in a distributed way, among multiple parties in the system. It also allows MedRec to manage changes to those access permissions in a decentralized way. Each patient is able to give others fine-grained read/write access to portions of their medical records. Furthermore patients can authorize others to act on their behalf as caretakers and manage access to their data for them.
+
+We have the following requirements for MedRec:
+
+\begin{enumerate}
+
+\item MedRec will not be a proprietary system. In a project designed to facillitate patient centered access to medical records it would be discordant to design the system in a closed way. To fully allow comments and feedback to its design MedRec should be designed under a Free (Libre) Software License. This way agents can know exactly what they are running and ensure for themselves their software is not mistreating their financial data.
+
+\item Patients should have a singular portal to access their data accross various provider databases. This means MedRec has to be interoperable across and agnostic to a range of storage implementations by providers.
+
+\item Patients should have fast access times to their data. Currently access time is dependent of jurisdiction and can take weeks for an accss request to be satisfied.
+
+\item MedRec should provide granular access permissions for patients. A patient should be able to specify a specific medical record, such as blood pressure, x-ray results, perscriptions, etc. and who should have access to that data. It should also distinguish between who is allowed to read the data, and who is allowed to make modifications to it.
+
+\item MedRec should provide improved data quality and quantity for medical research. MedRec empowers users to safely share portions of their medical data with a third party, thus empowering researchers with a new dataset.
+
+\item MedRec should incorporate a distributed method of access control data storage and retrieval. Even if the majority of nodes on the network are offline a user should still be able to view and modify their medical record access permissions. Raw data is still stored within provider's own databases so if a hospital burns down all of their patient's medical data will likely still be lost.
+
+\item MedRec should obfuscate any association between real world identities and agents in the system. This applies both to patients and to providers.
+
+\item There should be a cryptographically secure association between data in the system and real patient data stored in a medical provider’s database. Patient's and providers should be able to attest to the validity of the patient provider relationships stored on the blockchain.
+
+\item Bitcoin and most blockchain based systems require the use of cryptocurrency to facillitate interactions with the blockchain. MedRec should bypass this and remove cryptocurrency management as a requirement for using a blockchain based protocol.
+
+\item Only authorized agents should be able to make changes to a patient’s data. Authorization should be a cryptographically secure process.
+
+\item Patients as well as their caretakers are notified in real time of changes to records
+
+\item All agents in the sytem there should have their identity securely authenticated for interactions with each other.
+
+\item The system should scale to X amount of users per X <needs citation>
+
+\item There should be separation of authority to minimize the impact of security breaches. It may be allowable for a hacked or otherwise compromised provider to generate false data for all their patients, but it should be impossible for them to harm the relationship their patients have with other providers. Similarly actions taken by a patient should not change the data of other patients nor compromise the relationship between other patients and their providers.
+
+\item MedRec should be able to integrate nontraditional data sources. Wearable devices and mobile phones generate a wealth of day to day health data which could be managed by this system.
+
+\end{enumerate}
+
+\section{Implementation}
+
+MedRec is comprises three components: The User Client, Ethereum PoA Blockchain, and the Database Manager.
+
+\subsection{UserClient}
+
+This is the user facing component of the application. All of patients, providers, researchers, etc. will interact with MedRec through this interface.
+
+We will write a web app which will run locally and make queries to the other portions of the system, the Ethereum Blockchain and the Database Manager. MedRec uses a Proof of Authority (PoA) Blockchain to allow participants in the system to come to consensus about the state of the network. Unlike the first version of MedRec which was based on PoW no knowledge of  how to transact using cryptocurrency is required for users to participate in the system. Users will interact with a familiar web interface while behind the scenes the application logic translates their commands into calls to provider databases and smart contracts.
+
+    MedRec uses a local database to cache some information from the blockchain and store user settings. Users can create an account and then login with a username and password via their MedRec instance. This login mechanism is not necessary, all a person really requires to interact with the system is their 64 byte private key. The username password abstraction is to enhance the usability and familiarity of the interface. This login will only work on the computer the user account was created on as it's only stored in the local database. Multiple users can create accounts on and use one instance of MedRec. Passwords are salted and hashed before storage so that other users on the same system cannot scry others' password. We considered three different algorithms for hashing passwords: PBKDF2, bcrypt, and scrypt. We chose Scrypt even though it's the newest of the algorithms because it has been designed to be more resistant to brute force attacks. Unlike the other two, Scrypt is memory hard as well as computationally hard for an attacker to brute force. Due to this Scrypt is also the hash algorithm of choice for multiple popular cryptocurrencies including Dogecoin and Litecoin.
+
+    Account recovery is done via recovery seeds. When a user creates an account they not only generate a private key, but a 12 word recovery phrase or seed. This seed should be written down and kept secret similar to a passport or birth certificate. When a user signs in with this key they can execute all functions on their account, including generting a new private key and recovery seed. The recovery seed allows a user to manage their account in the case they forget their password or their primary computer is damaged. A hash of the recovery seed is stored on the blockchain with a tag associating it with the user's account. The seed does not need to be salted since they are verifiably unique to each private key. When a user logs into a MedRec instance with their recovery seed the software can query the blockchain to check which account the seed belongs too. This makes MedRec truly decentralized, even though access is the easiest from their primary computer, a user can easily move to another device and still securely access their medical data.
+
+\subsection{Blockchain}
+
+Before choosing to use a private blockchain we looked at many other options. When implemented correctly blockchain based systems can provide:
+
+\begin{enumerate}
+
+\item Consensus among a globally distributed set of peers so they are in aggreement on what is true and and what is not true
+
+\item Efficient reconcilliation between unharmonious states of reality to the most probable state
+
+\item A distributed data storage and computation network
+
+\item A system that is secure by design instead of as an afterthought
+
+\item A system that runs without the need for a central server or trusted authority to resolve disputes or coordinate participants
+
+\item Transparency to every one involved of the current set of rules agreed upon
+
+\item Access for anyone with an internet connection to participate
+
+\item Psudonymous identities- users are not inherently linked to their real world identities so deanonymization requires targeted attacks
+
+\end{enumerate}
+
+Deciding on a blockchain required analyzing what a potential MedRec would look like on each of those systems. A few analysis of alternatives used by other systems are below.
+
+\subsubsection{Bitcoin}
+
+Bitcoin is the original use of blockchain technology and it's still considered the most stable and secure implementation. It has never been hacked nor stopped running for the past 8 years since its inception. Other systems, similar in aims to MedRec, have been built using it and MedRec itself could operate on it. Although Bitcoin has it's own version of smart contract, their capabilities are greatly reduced from those available via the Ethereum Virtual Machine. Most other cryptocurrencies have the same drawbacks as Bitcoin.
+
+Bitcoin has a simple scripting language which is uusually used to represent the inputs and outputs of transactions. It allows for arithmetic and comparative operations on bits, signature generation and verification, time locks, and call stack operations. Each transaction is also allowed to include up to 40 bytes of data. This is enough space to include a small hash or reference to data living off the blockchain such as a land title <needs citation> or graduation certificate <needs citation>. The data itself has to be managed by other means, creating more complexity as applications have to keep track of the location of the pointers on the blockchain and then query another service to finish fulfilling a request.
+
+Additionally every transaction on the Bitcoin networks costs money and takes time. The current fee for a transaction on the network to get confirmed in about 10 minutes is currently \$4, but this number can spike up during periods of heavy usage such as when the bitcoin price varies too fast. Heavy utilization of the blockchain creates a backlog with transactions with higher fees getting processed first. To mitigate these costs and delays, applications using Bitcoin for storage tend to batch transactions so they can be submitted with a higher fee and get confirmed faster. The downside is batching transactions also causes delays. For some of the usecases we see for MedRec a 10 minute delay is unacceptable, especially when an alternative exists.
+
+\subsubsection{Public Ethereum}
+
+The public Ethereum network has some of these same limitations. An Ethereum transaction on average takes 15 seconds to confirm and the average transaction fee is \$.30. For both parameters this is a marked improvement over Bitcoin. But an optimal solution would get rid of the cost completely.
+
+All transactions on the public Ethereum network are public and must be stored by all the full nodes on the network and this causes implementation difficulties for a project such as MedRec which is dealing with sensitive data. Static analysis has been used to deanonymize users of Bitcoin <needs citation, use the mt gox hacker case>  and I have done research previously <needs citation> exploring dynamic deanonymization on the Ethereum network. Since data on the blockchain is persistent, it lacks retroactive identity confidentiality. At some point in the future an algorithm may be developed to correlate and deanonymize many users of a public blockchain. By not using a public blockchain MedRec can defend against this attack.
+
+Along with its powerful Turing complete programming language, the public Ethereum blockchain brings along all it's programs. A full node on the network must process all the transactions and blocks generated on the network. The Ethereum developers have advanced plans to mitigate this, but the overarching fact remains that for the system to remain operational some nodes must track everything that happens on the network. On a private blockchain we can model the growth of the system and experimentally stress test it. Nodes will not have to store any data that isn't required for the system to run.
+
+\subsubsection{Alternative EVMs}
+
+Other alternatives to and implementations of the Ethereum EVM exist, with different consensus parameters, target audience, or capabilities. Some of them, such as JP. Morgan's Quorum <needs citation> also allow for private transactions. ErisDB has had support for private blockchains well before the Go-Ethereum client MedRec uses. Hyperledger Fabric has not yet reached version 1.0, is being developed as an enterprise grade smart contract platform based on Node.js and Java. We are using a private Ethereum blockchain since the Ethereum ecosystem is the most diverse and has the most public scrutiny and support. The Go-Ethereum client is the most used Ethereum client, developed primarily by the Ethereum Foundation. Over time we expect the capabilities offered by this client to approach those offered by other alternatives. Many of these alternative blockchain solutions use the same Ethereum Virtual Machine, providing easier portability between systems. As the Ethereum ecosystem further develops we may port our smart contracts to another blockchain if necessary.
+
+\subsection{Blockchain Choice}
+
+MedRec uses a PoA blockchain developed as part of the Go-Ethereum client. PoA is used to create private blockchains, where only a federated set of nodes are allowed to make modifications to the shared ledger. The data stored on the blockchain can still be made public outside of the federated set of nodes maintaining the blockchain. As PoA changes the fundamental game theoretic security model of PoW blockchains from a financial incentive to trust based. The intrinsic cost of trust replaces the extrinsic financial cost. The security of such blockchains depends on a choice of federated nodes.
+
+We decided to make providers the authorities on the blockchain. These entities already are entrusted with the safety and security of their patron's medical data. In many countries they are legally required to comply with strict standards around the protection and handling of patient medical records. This makes them ideal custodians of the access rights which govern MedRec. In MedRec medical providers are able to be voted in as voting authorities by the current set of authorities. An authority is able to form blocks and add them to the blockchain. Since the identities of all participants is known regulation can be done external to the blockchain. The penalties for abusing their abilities as an authority would be severe as they would likely be penalized under HIPAA provision.
+
+Even as authorities, the attack surface for providers remains low. A provider has the ability to validate transactions and add them to the blockchain. Unlike PoW there is no external rate limiting mechanism such as computational power. A properly functioning implementation of a PoA client inhibits its own rate of block generation so the network isn't needlessly flooded with data. --sybil attack
+
+ Since each transaction is public other providers are able to validate every transaction as well. A provider is incentivised not to generate fradulent data because they will be easily identified.  Furthermore the type of attacks on the system by providers is limited since their only duty is to confirm transactions. Providers cannot impersonate other actors in the system or generate false permissions for their patients as they do not have those private keys.
+
+\subsection{Smart Contracts}
+
+There are three types of smart contracts in MedRec. These are written in Solidity and run on our PoA blockchain.
+
+\subsubsection{Agent}
+
+The Agent and it's derivative the AgentGroup contracts represent actors on MedRec. They are analogous to the \textit{SummaryContract} in MedRec v1. Indviduals interact with the system using the Agent contracts as a proxy and multiple agents can form an AgentGroup. These contracts hold data about the entities they represent. For patients they store a list of PatientProviderContracts, and for providers they hold a list of provided permissions. The AgentGroup is provided as a convenience to give permissions to a large set of agents at once. For example, a group of emergency rooms from different providers may join into one AgentGroup allowing a patient to give them all access to basic bloodwork data in one step. The members of the AgentGroup can change without any further action on the part of the patient.
+
+\subsubsection{Relationship}
+
+This contract represents the union between to Agents or an Agent and Agent Group. The actuall access permissions that the entire system of MedRec is designed to protect are stored here. This contract allows granular specification of Read/Write permissions and time locks to temporarily grant access. Through this interface third parties can gain access to a patients data while the patient maintains the ability to revoke this right at any time.
+
+\subsection{Anonymitiy}
+
+Patients have some anonymity in the system as their identity is only known to those organizations whom they share thier identity with. Yet this is still not enough protection, as an inintended side effect of using a single smart contract to represent a patient (the Agent contract) allows anyone who discovers a patient's Agent contract to decipher all other relationships with providers. One example of a case this would be harmful is when a patient shares portions of their medical records with both their employeer and a gynecologist. The employer could detect this association and find a pretense to discharge their employee to avoid paying health insurance.
+
+We solve this in two steps. The first step is disassociating each patient identity from provider identities. The solution to this is simple, each provider makes a new ethereum account for each patient provider relationship. We call these patient specific accounts \textit{delegate accounts}. It's easier for a provider to manage these extra accounts, in practice it would be an extra column of data stored along with a user's name in a database. This method also allows a patient to continue interacting with the system while keeping track of only one account.
+
+The second step is more complex and it solves the problem with metadata that the first step leaves open. Even though a patient is not iteracting directly with their provider's main account, that main account is still being used to sign blocks containing the patient's transactions. Over time this correlation could be used to associate patient with providers. To solve this we do something which could not be done with public blockchains. Instead of confirming patient transactions themself a provider asks another provider to do it for them. Remember that in MedRec providers also act as authorities and sign blocks. The transaction is shared off the blockchain via other Internet protocols with another provider in a round-robin fashion before ultimately being committed to in a new block.
+
+\section{Acknowledgements}
+
+I thank my supervisor, the venerable Dr. Andrew Lippman. I also thank the other people directly working with me on this project in the Media Lab Viral Communications group, Kallirroi Retzepi and Agnes Fury Cameron. I would also like to thank the elusive yet revered inventor(s) of Bitcoin, Satoshi Nakamoto for it is with their invention that I am able to put myself through graduate school.
+
+% -----------------------------------REFERENCE----------------------------------------
+\newpage
+
+\begin{thebibliography}{9}
+\bibitem{bitcoin} https://bitcoin.org/bitcoin.pdf
+\bibitem{elecCountry} https://en.wikipedia.orgm/wiki/List\_of\_countries\_by\_electricity\_consumption
+\bibitem{elecBitcoin} http://blog.zorinaq.com/bitcoin-electricity-consumption/
+\bibitem{byzantine} https://en.wikipedia.org/wiki/Byzantine\_fault\_tolerance
+\bibitem{byzsolved} https://bitcointalk.org/oldSiteFiles/byzantine.html
+\bibitem{salting} https://nakedsecurity.sophos.com/2013/11/20/serious-security-how-to-store-your-users-passwords-safely/
+\bibitem https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
+\bibitem https://github.com/ryancdotorg/brainflayer
+\end{thebibliography}
+
+%nick szabo smart contracts
+% I want this but I haven't read it yet http://firstmonday.org/ojs/index.php/fm/article/view/548/469
+
+
+\newpage
+\end{document}
